@@ -1,0 +1,105 @@
+<div style="padding: 20px; background: #ffffff; display: flex; gap: 10px; border-bottom: 1px solid #ddd;">
+  <input
+    type="text"
+    [(ngModel)]="aiGoal"
+    placeholder="የፕሮጀክት ሃሳብዎን ይጻፉ (ለምሳሌ፡ የሞባይል መተግበሪያ መስራት)..."
+    style="flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px;"
+  />
+  <button
+    (click)="onGenerateAiTasks()"
+    [disabled]="isGenerating"
+    style="padding: 12px 24px; font-size: 16px; background: #0052cc; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    {{ isGenerating ? 'AI እያሰበ ነው...' : '✨ በ AI ስራዎችን ፍጠር' }}
+  </button>
+</div>
+
+<div style="padding: 12px 20px; background: #f8f9fa; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;">
+  <input
+    type="text"
+    [(ngModel)]="searchQuery"
+    (input)="onSearch()"
+    placeholder="🔍 ስራዎችን በፍጥነት ይፈልጉ (PostgreSQL Search)..."
+    style="width: 350px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;"
+  />
+  <button
+    (click)="clearNotifications()"
+    style="position: relative; padding: 10px 18px; background: #ffffff; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">
+    🔔 ማሳወቂያዎች
+    <span *ngIf="unreadNotifications > 0" style="background: #de350b; color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; margin-left: 5px;">
+      {{ unreadNotifications }}
+    </span>
+  </button>
+</div>
+
+<div class="kanban-container" cdkDropListGroup>
+
+  <!-- 1. TO DO COLUMN -->
+  <div class="kanban-column">
+    <h2>To Do</h2>
+    <div
+      cdkDropList
+      [cdkDropListData]="todo"
+      (cdkDropListDropped)="drop($event, 'TODO')"
+      class="kanban-list">
+      <div *ngFor="let task of todo" cdkDrag class="task-card" style="display: flex; justify-content: space-between; align-items: start;">
+        <div>
+          <h3>{{ task.title }}</h3>
+          <p>{{ task.description }}</p>
+        </div>
+        <button
+          (click)="onDeleteTask(task.id)"
+          title="ስራውን አጥፋ"
+          style="background: #ffebe6; color: #de350b; border: none; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-weight: bold;">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. DOING COLUMN -->
+  <div class="kanban-column">
+    <h2>In Progress</h2>
+    <div
+      cdkDropList
+      [cdkDropListData]="doing"
+      (cdkDropListDropped)="drop($event, 'DOING')"
+      class="kanban-list">
+      <div *ngFor="let task of doing" cdkDrag class="task-card" style="display: flex; justify-content: space-between; align-items: start;">
+        <div>
+          <h3>{{ task.title }}</h3>
+          <p>{{ task.description }}</p>
+        </div>
+        <button
+          (click)="onDeleteTask(task.id)"
+          title="ስራውን አጥፋ"
+          style="background: #ffebe6; color: #de350b; border: none; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-weight: bold;">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. DONE COLUMN -->
+  <div class="kanban-column">
+    <h2>Done</h2>
+    <div
+      cdkDropList
+      [cdkDropListData]="done"
+      (cdkDropListDropped)="drop($event, 'DONE')"
+      class="kanban-list">
+      <div *ngFor="let task of done" cdkDrag class="task-card" style="display: flex; justify-content: space-between; align-items: start;">
+        <div>
+          <h3>{{ task.title }}</h3>
+          <p>{{ task.description }}</p>
+        </div>
+        <button
+          (click)="onDeleteTask(task.id)"
+          title="ስራውን አጥፋ"
+          style="background: #ffebe6; color: #de350b; border: none; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-weight: bold;">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
